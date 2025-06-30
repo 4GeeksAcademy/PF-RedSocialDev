@@ -35,7 +35,7 @@ const Login = () => {
       }
 
       localStorage.setItem("token", data.token);
-      dispatch({ type: "set_user", payload: data.user }); // Asegúrate de manejar esto en tu store
+      dispatch({ type: "set_user", payload: data.user }); 
       navigate("/catalogo");
     } catch (err) {
       setError("Error al iniciar sesión. Intenta nuevamente.");
