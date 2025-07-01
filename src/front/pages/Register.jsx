@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import logo from "../assets/img/isotipo.png";
 
 export const Register = () => {
   const [formData, setFormData] = useState({
@@ -40,9 +41,14 @@ export const Register = () => {
   };
 
   return (
-    <div className="container py-5 d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card p-5 shadow-lg" style={{ maxWidth: "500px", width: "100%" }}>
-        <h2 className="mb-4 text-center">Crear Cuenta en GitWise</h2>
+    <div className="container-fluid py-5 d-flex justify-content-center align-items-center min-vh-100" style={{
+      background: "linear-gradient(135deg, #4A3AFF 0%, #A786FF 100%)"
+    }}>
+      <div className="card p-5 shadow-lg" style={{ maxWidth: "500px", width: "100%", border: "none" }}>
+        <div className="text-center mb-4">
+          <img src={logo} alt="GitWise Logo" style={{ width: "80px" }} />
+          <h2 className="mt-3" style={{ color: "#4A3AFF" }}>Crear Cuenta en GitWise</h2>
+        </div>
         {success ? (
           <div className="alert alert-success text-center" role="alert">
             Registro exitoso. Redirigiendo...
@@ -69,9 +75,17 @@ export const Register = () => {
               <option value="MID_DEV">Mid Dev</option>
               <option value="SENIOR_DEV">Senior Dev</option>
             </select>
-            <button className="btn btn-primary w-100" type="submit">Registrarme</button>
+            <button className="btn w-100" style={{ backgroundColor: "#4A3AFF", color: "white", transition: "0.3s", boxShadow: "0 4px 12px rgba(74,58,255,0.3)" }}
+              onMouseOver={e => e.currentTarget.style.boxShadow = "0 6px 18px rgba(74,58,255,0.4)"}
+              onMouseOut={e => e.currentTarget.style.boxShadow = "0 4px 12px rgba(74,58,255,0.3)"}
+              type="submit">
+              Registrarme
+            </button>
           </form>
         )}
+        <p className="text-center mt-3">
+          ¿Ya tienes cuenta? <Link to="/login" style={{ color: "#4A3AFF", fontWeight: "bold" }}>Inicia sesión</Link>
+        </p>
       </div>
     </div>
   );
