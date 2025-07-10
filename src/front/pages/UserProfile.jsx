@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const UserProfile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { store } = useGlobalReducer();
+
   const [user, setUser] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [myPosts, setMyPosts] = useState([]);
 
   useEffect(() => {
+    if (!store.user) {
+      navigate("/login");
+      return;
+    }
+
     const mockUser = {
       username: id || "albertdcm",
       email: "albert@example.com",
@@ -33,14 +42,13 @@ export const UserProfile = () => {
     setUser(mockUser);
     setFavorites(mockFavorites);
     setMyPosts(mockMyPosts);
-  }, [id]);
+  }, [id, store.user]);
 
   if (!user) return <p className="text-white p-5">Loading profile...</p>;
 
   return (
     <div className="bg-black text-white min-vh-100 p-3">
       <div className="card bg-dark text-white shadow-lg">
-        {/* Banner */}
         <div className="position-relative">
           <img
             src="https://images.unsplash.com/photo-1503264116251-35a269479413"
@@ -48,8 +56,6 @@ export const UserProfile = () => {
             className="card-img-top"
             style={{ height: "200px", objectFit: "cover" }}
           />
-
-          {/* Avatar */}
           <img
             src="https://avatars.githubusercontent.com/u/000000?v=4"
             alt="Avatar"
@@ -64,7 +70,6 @@ export const UserProfile = () => {
           />
         </div>
 
-        {/* Info */}
         <div className="card-body text-center mt-5 pt-4">
           <h3 className="card-title">{user.username}</h3>
           <p className="text-muted fst-italic">{user.bio}</p>
@@ -97,7 +102,6 @@ export const UserProfile = () => {
         </div>
       </div>
 
-      {/* My Posts */}
       <div className="mt-5">
         <h4 style={{ color: "#2563eb" }}>My Posts</h4>
         {myPosts.length === 0 ? (
@@ -118,7 +122,6 @@ export const UserProfile = () => {
         )}
       </div>
 
-      {/* Favorites */}
       <div className="mt-4">
         <h4 style={{ color: "#2563eb" }}>My Favorites</h4>
         {favorites.length === 0 ? (

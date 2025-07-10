@@ -1,8 +1,8 @@
+// Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import isotipo from "../assets/img/isotipo.png";
-
 import bannerImg from "../assets/img/ferenc-almasi-oCm8nPkE40k-unsplash.jpg";
 
 export const Login = () => {
@@ -22,16 +22,20 @@ export const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+
       if (res.ok) {
         const data = await res.json();
-        dispatch({ type: "set_user", payload: data });
+        localStorage.setItem("token", data.token); // ✅ Guardar token
+        dispatch({ type: "set_user", payload: data }); // ✅ Actualizar global store
         alert("Login successful!");
-        navigate("/profile");
+        navigate("/profile"); // ✅ Redirigir
       } else {
-        alert("Invalid email or password.");
+        const error = await res.json();
+        alert("Error: " + (error?.error || "Invalid credentials"));
       }
     } catch (err) {
-      console.error(err);
+      console.error("Login error:", err);
+      alert("An unexpected error occurred.");
     }
   };
 

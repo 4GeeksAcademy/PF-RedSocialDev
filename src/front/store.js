@@ -2,9 +2,9 @@ export const initialStore = () => {
   return {
     message: null,
     user: {
-      username: "guest", // o null si se carga luego
-      likes: [],         // IDs de posts con like
-      favorites: []      // IDs de posts favoritos
+      username: "guest",
+      likes: [],
+      favorites: []
     },
     todos: [
       {
@@ -24,10 +24,7 @@ export const initialStore = () => {
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
     case 'set_hello':
-      return {
-        ...store,
-        message: action.payload
-      };
+      return { ...store, message: action.payload };
 
     case 'add_task':
       const { id, color } = action.payload;
@@ -39,19 +36,17 @@ export default function storeReducer(store, action = {}) {
       };
 
     case 'set_user':
-      return {
-        ...store,
-        user: action.payload
-      };
+      return { ...store, user: action.payload };
+
+    case 'logout':
+      return { ...store, user: null };
 
     case 'toggle_like':
       if (!store.user) return store;
-
       const currentLikes = store.user.likes || [];
       const updatedLikes = currentLikes.includes(action.payload)
         ? currentLikes.filter(id => id !== action.payload)
         : [...currentLikes, action.payload];
-
       return {
         ...store,
         user: {
@@ -62,12 +57,10 @@ export default function storeReducer(store, action = {}) {
 
     case 'toggle_favorite':
       if (!store.user) return store;
-
       const currentFavorites = store.user.favorites || [];
       const updatedFavorites = currentFavorites.includes(action.payload)
         ? currentFavorites.filter(id => id !== action.payload)
         : [...currentFavorites, action.payload];
-
       return {
         ...store,
         user: {

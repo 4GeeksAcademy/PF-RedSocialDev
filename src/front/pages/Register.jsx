@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 import isotipo from "../assets/img/isotipo.png";
 import bannerImg from "../assets/img/mohammad-rahmani-_Fx34KeqIEw-unsplash.jpg";
 
 export const Register = () => {
+  const { dispatch } = useGlobalReducer(); // ✅ Importante
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    first_name: "",
+    name: "",
     last_name: "",
     username: "",
     email: "",
@@ -28,13 +30,18 @@ export const Register = () => {
         body: JSON.stringify(form),
       });
       if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+        dispatch({ type: "set_user", payload: data }); // ✅ Esto faltaba
         alert("Account created successfully.");
         navigate("/profile");
       } else {
-        alert("Error creating account.");
+        const error = await res.json();
+        alert("Error: " + (error?.error || "Could not create account"));
       }
     } catch (err) {
       console.error(err);
+      alert("An error occurred.");
     }
   };
 
@@ -49,6 +56,9 @@ export const Register = () => {
         }),
       });
       if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+        dispatch({ type: "set_user", payload: data }); // ✅ También aquí
         alert("Logged in as guest.");
         navigate("/profile");
       } else {
@@ -87,7 +97,7 @@ export const Register = () => {
               <div className="col-md-6 mb-2">
                 <input
                   type="text"
-                  name="first_name"
+                  name="name"
                   placeholder="First name"
                   className="form-control bg-light border-0"
                   onChange={handleChange}
@@ -140,9 +150,11 @@ export const Register = () => {
               required
             >
               <option value="">Select your main stack</option>
-              <option value="frontend">Frontend</option>
-              <option value="backend">Backend</option>
-              <option value="fullstack">Fullstack</option>
+              <option value="HTML">HTML</option>
+              <option value="CSS">CSS</option>
+              <option value="JAVASCRIPT">JavaScript</option>
+              <option value="PYTHON">Python</option>
+              <option value="SQL">SQL</option>
             </select>
 
             <select
@@ -152,9 +164,10 @@ export const Register = () => {
               required
             >
               <option value="">Developer level</option>
-              <option value="junior">Junior</option>
-              <option value="semi-senior">Semi-Senior</option>
-              <option value="senior">Senior</option>
+              <option value="STUDENT">Student</option>
+              <option value="JUNIOR_DEV">Junior</option>
+              <option value="MID_DEV">Mid-level</option>
+              <option value="SENIOR_DEV">Senior</option>
             </select>
 
             <button type="submit" className="btn btn-primary w-100 mt-3">
