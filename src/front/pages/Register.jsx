@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import isotipo from "../assets/img/isotipo.png";
-
 import bannerImg from "../assets/img/mohammad-rahmani-_Fx34KeqIEw-unsplash.jpg";
 
 export const Register = () => {
@@ -33,6 +32,27 @@ export const Register = () => {
         navigate("/profile");
       } else {
         alert("Error creating account.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    try {
+      const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: "guest@example.com",
+          password: "guest123",
+        }),
+      });
+      if (res.ok) {
+        alert("Logged in as guest.");
+        navigate("/profile");
+      } else {
+        alert("Guest login failed.");
       }
     } catch (err) {
       console.error(err);
@@ -139,6 +159,13 @@ export const Register = () => {
 
             <button type="submit" className="btn btn-primary w-100 mt-3">
               Register
+            </button>
+            <button
+              type="button"
+              onClick={handleGuestLogin}
+              className="btn btn-outline-secondary w-100 mt-2"
+            >
+              Continue as Guest
             </button>
           </form>
         </div>
