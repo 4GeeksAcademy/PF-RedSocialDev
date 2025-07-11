@@ -1,11 +1,9 @@
+// File: src/front/js/store.js
+
 export const initialStore = () => {
   return {
     message: null,
-    user: {
-      username: "guest",
-      likes: [],
-      favorites: []
-    },
+    user: null, // ✅ Ya no arranca como "guest"
     todos: [
       {
         id: 1,

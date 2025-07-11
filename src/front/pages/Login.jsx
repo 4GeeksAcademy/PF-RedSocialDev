@@ -1,4 +1,4 @@
-// Login.jsx
+// File: src/front/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
@@ -25,10 +25,10 @@ export const Login = () => {
 
       if (res.ok) {
         const data = await res.json();
-        localStorage.setItem("token", data.token); // ✅ Guardar token
-        dispatch({ type: "set_user", payload: data }); // ✅ Actualizar global store
+        localStorage.setItem("token", data.token);
+        dispatch({ type: "set_user", payload: data });
         alert("Login successful!");
-        navigate("/profile"); // ✅ Redirigir
+        navigate("/profile");
       } else {
         const error = await res.json();
         alert("Error: " + (error?.error || "Invalid credentials"));
