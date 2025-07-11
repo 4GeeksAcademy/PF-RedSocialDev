@@ -5,7 +5,7 @@ import isotipo from "../assets/img/isotipo.png";
 import bannerImg from "../assets/img/mohammad-rahmani-_Fx34KeqIEw-unsplash.jpg";
 
 export const Register = () => {
-  const { dispatch } = useGlobalReducer(); // ✅ Importante
+  const { dispatch } = useGlobalReducer();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
@@ -29,10 +29,11 @@ export const Register = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
+
       if (res.ok) {
         const data = await res.json();
         localStorage.setItem("token", data.token);
-        dispatch({ type: "set_user", payload: data }); // ✅ Esto faltaba
+        dispatch({ type: "set_user", payload: data });
         alert("Account created successfully.");
         navigate("/profile");
       } else {
@@ -42,30 +43,6 @@ export const Register = () => {
     } catch (err) {
       console.error(err);
       alert("An error occurred.");
-    }
-  };
-
-  const handleGuestLogin = async () => {
-    try {
-      const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: "guest@example.com",
-          password: "guest123",
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem("token", data.token);
-        dispatch({ type: "set_user", payload: data }); // ✅ También aquí
-        alert("Logged in as guest.");
-        navigate("/profile");
-      } else {
-        alert("Guest login failed.");
-      }
-    } catch (err) {
-      console.error(err);
     }
   };
 
@@ -172,13 +149,6 @@ export const Register = () => {
 
             <button type="submit" className="btn btn-primary w-100 mt-3">
               Register
-            </button>
-            <button
-              type="button"
-              onClick={handleGuestLogin}
-              className="btn btn-outline-secondary w-100 mt-2"
-            >
-              Continue as Guest
             </button>
           </form>
         </div>
