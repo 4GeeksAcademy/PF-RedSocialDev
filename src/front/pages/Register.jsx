@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import isotipo from "../assets/img/isotipo.png";
 import bannerImg from "../assets/img/mohammad-rahmani-_Fx34KeqIEw-unsplash.jpg";
 
 export const Register = () => {
-  const { dispatch } = useGlobalReducer();
+  const { store, dispatch } = useGlobalReducer();
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: "",
     last_name: "",
@@ -16,6 +17,12 @@ export const Register = () => {
     stack: "",
     level: "",
   });
+
+  useEffect(() => {
+    if (store.user) {
+      navigate("/profile");
+    }
+  }, [store.user]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,15 +37,15 @@ export const Register = () => {
         body: JSON.stringify(form),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        const data = await res.json();
         localStorage.setItem("token", data.token);
-        dispatch({ type: "set_user", payload: data });
+        dispatch({ type: "set_user", payload: data.user });
         alert("Account created successfully.");
         navigate("/profile");
       } else {
-        const error = await res.json();
-        alert("Error: " + (error?.error || "Could not create account"));
+        alert("Error: " + (data?.error || "Could not create account"));
       }
     } catch (err) {
       console.error(err);

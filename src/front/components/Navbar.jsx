@@ -1,4 +1,3 @@
-// File: src/front/components/Navbar.jsx
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logocompleto.png";
 import useGlobalReducer from "../hooks/useGlobalReducer";
@@ -10,7 +9,7 @@ export const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch({ type: "logout" });
-    navigate("/");
+    navigate("/login"); // redirige al login tras cerrar sesión
   };
 
   return (
@@ -39,29 +38,19 @@ export const Navbar = () => {
             {store.user && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/posts">
-                    Projects
-                  </Link>
+                  <Link className="nav-link" to="/posts">Projects</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/AI-search">
-                    AI Search
-                  </Link>
+                  <Link className="nav-link" to="/AI-search">AI Search</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/admin">
-                    Admin
-                  </Link>
+                  <Link className="nav-link" to="/admin">Admin</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/contact">
-                    Contact
-                  </Link>
+                  <Link className="nav-link" to="/contact">Contact</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/profile">
-                    Profile
-                  </Link>
+                  <Link className="nav-link" to="/profile">Profile</Link>
                 </li>
               </>
             )}
@@ -70,12 +59,8 @@ export const Navbar = () => {
           <div className="d-flex align-items-center">
             {!store.user ? (
               <>
-                <Link to="/login" className="btn btn-outline-primary me-2">
-                  Login
-                </Link>
-                <Link to="/register" className="btn btn-primary">
-                  Register
-                </Link>
+                <Link to="/login" className="btn btn-outline-primary me-2">Login</Link>
+                <Link to="/register" className="btn btn-primary">Register</Link>
               </>
             ) : (
               <>

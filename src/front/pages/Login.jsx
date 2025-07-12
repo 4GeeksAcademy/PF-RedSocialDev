@@ -1,14 +1,19 @@
-// File: src/front/pages/Login.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import isotipo from "../assets/img/isotipo.png";
 import bannerImg from "../assets/img/ferenc-almasi-oCm8nPkE40k-unsplash.jpg";
 
 export const Login = () => {
-  const { dispatch } = useGlobalReducer();
+  const { store, dispatch } = useGlobalReducer();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
+
+  useEffect(() => {
+    if (store.user) {
+      navigate("/profile");
+    }
+  }, [store.user]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -16,6 +21,7 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/login", {
         method: "POST",
@@ -23,19 +29,19 @@ export const Login = () => {
         body: JSON.stringify(form),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        const data = await res.json();
         localStorage.setItem("token", data.token);
-        dispatch({ type: "set_user", payload: data });
-        alert("Login successful!");
+        dispatch({ type: "set_user", payload: data.user });
+        alert("Welcome back!");
         navigate("/profile");
       } else {
-        const error = await res.json();
-        alert("Error: " + (error?.error || "Invalid credentials"));
+        alert("Error: " + (data?.error || "Invalid credentials"));
       }
     } catch (err) {
-      console.error("Login error:", err);
-      alert("An unexpected error occurred.");
+      console.error(err);
+      alert("An error occurred.");
     }
   };
 
@@ -51,14 +57,14 @@ export const Login = () => {
       </div>
 
       <div className="w-100 w-md-50 bg-dark text-white d-flex align-items-center justify-content-center">
-        <div className="p-5" style={{ width: "100%", maxWidth: "400px" }}>
+        <div className="p-5" style={{ width: "100%", maxWidth: "500px" }}>
           <div className="text-center mb-4">
             <img src={isotipo} alt="GitWise logo" width="50" />
             <h4 className="mt-3">
               Sign in to <span style={{ color: "#2563eb" }}><strong>GitWise</strong></span>
             </h4>
             <p className="text-secondary">
-              Discover inspiring projects and connect with developers like you.
+              Explore open source projects and grow your dev journey.
             </p>
           </div>
 
@@ -67,24 +73,22 @@ export const Login = () => {
               type="email"
               name="email"
               placeholder="Email"
-              className="form-control mb-3 bg-light border-0"
+              className="form-control my-2 bg-light border-0"
               onChange={handleChange}
               required
             />
+
             <input
               type="password"
               name="password"
               placeholder="Password"
-              className="form-control mb-4 bg-light border-0"
+              className="form-control my-2 bg-light border-0"
               onChange={handleChange}
               required
             />
-            <button type="submit" className="btn btn-primary w-100 mb-3">
-              Sign In
-            </button>
 
-            <button type="button" className="btn btn-outline-light w-100">
-              <i className="fab fa-google me-2"></i> Continue with Google
+            <button type="submit" className="btn btn-primary w-100 mt-3">
+              Login
             </button>
           </form>
         </div>

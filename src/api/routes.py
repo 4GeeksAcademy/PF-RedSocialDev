@@ -1,23 +1,16 @@
-"""
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
-"""
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Post, Comments
 from api.utils import generate_sitemap, APIException
-from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 api = Blueprint('api', __name__)
 bcrypt = Bcrypt()
-CORS(api)  # Allow CORS requests to this API
 
 #------------------------ Hello Test ------------------------
-@api.route('/hello', methods=['POST', 'GET'])
+@api.route('/hello', methods=['GET'])
 def handle_hello():
-    return jsonify({
-        "message": "Hello! I'm a message that came from the backend."
-    }), 200
+    return jsonify({"message": "Hello! I'm a message that came from the backend."}), 200
 
 #------------------------ Register ------------------------
 @api.route('/register', methods=['POST'])
@@ -164,9 +157,3 @@ def handle_comments(post_id):
         "msg": "Comment added successfully",
         "comment": comments.serialize()
     }), 201
-
-
-
-
-
-
