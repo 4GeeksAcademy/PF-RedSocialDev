@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import isotipo from "../assets/img/isotipo.png";
 export const Contact = () => {
     const [formData, setFormData] = useState({
@@ -7,34 +7,40 @@ export const Contact = () => {
         subject: "",
         message: "",
     })
-    // fetch("routes/contact"), {
-    //     method: "POST",
-    //     body: JSON.stringify(formData),
-    //     headers: { "Content-Type": "application/json" }
-    // })
-    //     .then(() => alert("Thank you for your message! We'll reply as soon as possible:)."))
-    //     .catch(() => alert("Something went wrong. Please try again"))
-
-    // fetch("https://jsonplaceholder.typicode.com/contact/1", {
-    //     method: "POST",
-    //     body: JSON.stringify(formData),
-    //     Headers: { "Content-Type": "application/json" }
-    // })
-    //     .then(() => alert("Thank you for your message! We'll reply as soon as possible:)."))
-    //     .catch(() => alert("Something went wrong. Please try again"))
 
     const handleSubmit = (e) => {
         e.preventDefault(); //para que no haga refresh cada vez que hundimos send
-        console.log("Message would have been submitted if we had the email connected:", formData)
 
-        alert("Thank you for your message!")
-
-        setFormData({ //para que se vuelva a poner igual
-            fullname: "",
-            email: "",
-            subject: "",
-            message: "",
+        fetch("http://localhost:3001/api/contact", {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+                "Content-Type": "application/json"
+            }
         })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json()
+            })
+            .then(data => {
+                alert("Thank you for your message! It was sent successfully and we'll reply as soon as possible:)");
+
+                setFormData({ //para que se vuelva a poner igual
+                    fullname: "",
+                    email: "",
+                    subject: "",
+                    message: "",
+                })
+            })
+            .catch(error => {
+                console.error("Something went wrong. Could not send message:", error)
+                alert("Oh no! We couldn't send your message, please try again.")
+            })
+        // console.log("Message would have been submitted if we had the email connected:", formData)
+
+        // alert("Thank you for your message!")
 
     }
     return (
