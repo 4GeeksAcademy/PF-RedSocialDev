@@ -102,9 +102,9 @@ export const Login = () => {
               Sign In
             </button>
 
-            <button type="button" className="btn btn-outline-light w-100">
+            {/*<button type="button" className="btn btn-outline-light w-100">
               <i className="fab fa-google me-2"></i> Continue with Google
-            </button>
+            </button>*/}
           </form>
         </div>
       </div>

@@ -38,21 +38,42 @@ export const Navbar = () => {
         {/* Enlaces del menú */}
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link" to="/posts">Projects</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/AI-search">AI Search</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/admin">Admin</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/contact">Contact</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/profile">Profile</Link>
-            </li>
+
+            {/* Si no está logueado muestra solo Contact y Donate */}
+            {/* La expresión {store.user ? ( ... ) : ( ... )} es un condicional ternario que sirve para mostrar contenido diferente en el JSX*/}
+            {!store.user ? (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/contact">Contact</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="https://stripe.com/es">Donate</Link>
+                </li>
+              </>
+            ) : (
+              // Si está logueado muestra TODO el menú
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/posts">Projects</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/AI-search">AI Search</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/admin">Admin</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/contact">Contact</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/profile">Profile</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="https://stripe.com/es">Donate</Link>
+                </li>
+              </>
+            )}
+
           </ul>
 
           {/* Parte derecha del navbar */}
