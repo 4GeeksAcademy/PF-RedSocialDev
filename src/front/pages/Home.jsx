@@ -1,104 +1,56 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-
-// Importar el componente para mostrar íconos
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// Importar los íconos que vas a usar
 import { faUserGear, faProjectDiagram, faUsers, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-// Este componente es la vista principal (landing page)
-// Muestra el título, una imagen y las cards con los planes
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+
 export const Home = () => {
     return (
-        <>
-            <div className="">
-                {/* Sección superior con título, descripción  */}
-                <div className="pt-3" >
-                    <div className="d-flex justify-content-center ">
-                    </div>
-                    <div>
-                        <div className="container text-center py-5">
-                            {/* titulo principal */}
-                            <h1 className="main-title">Don’t Search. Ask. Find. Code.</h1>
-                            {/* subtitulo del main */}
-                            <p className="main-subtitle">
-                                <strong>A social network for developers</strong> inspired by GitHub, where you can share projects, collaborate, and explore ideas with <strong>AI-powered guidance</strong>.
-                            </p>
-                            {/* descripcion del main */}
-                            <p className="main-description">
-                                What makes it unique? An <strong>AI-powered search engine</strong> that understands natural language and gives contextual suggestions.
-                            </p>
-                            {/* iconos y texto */}
-                            <div className="container pt-5">
-                                <div className="row text-center text-light">
-                                    {/* icono 1 */}
-                                    <div className="col-6 col-md-3 mb-4">
-                                        <FontAwesomeIcon icon={faUserGear} className="feature-icon" />
-                                        <p className="mt-2 fw-semibold">Create & manage developer profiles</p>
-                                    </div>
-                                    {/* icono 2 */}
-                                    <div className="col-6 col-md-3 mb-4">
-                                        <FontAwesomeIcon icon={faProjectDiagram} className="feature-icon" />
-                                        <p className="mt-2 fw-semibold">Publish & explore community projects</p>
-                                    </div>
-                                    {/* icono 3 */}
-                                    <div className="col-6 col-md-3 mb-4">
-                                        <FontAwesomeIcon icon={faUsers} className="feature-icon" />
-                                        <p className="mt-2 fw-semibold">Follow developers & discover trends</p>
-                                    </div>
-                                    {/* icono 4 */}
-                                    <div className="col-6 col-md-3 mb-4">
-                                        <FontAwesomeIcon icon={faMagnifyingGlass} className="feature-icon" />
-                                        <p className="mt-2 fw-semibold">Search projects using AI</p>
-                                    </div>
-                                </div>
-                            </div>
+        <motion.div className="hero-bg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
+            <div className="container">
+                <motion.h1 className="hero-title" initial={{ y: -20 }} animate={{ y: 0 }}>Don’t Search. Ask. Find. Code.</motion.h1>
+                <motion.p className="hero-subtitle" initial={{ y: -10 }} animate={{ y: 0 }} transition={{ delay: 0.1 }}>
+                    GitWise is the future of social coding: build and ship software with the help of AI, collaborate, and grow your developer presence.
+                </motion.p>
+
+                <motion.div className="row mt-5 text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+                    <div className="col-6 col-md-3 mb-4">
+                        <div className="icon-box">
+                            <FontAwesomeIcon icon={faUserGear} size="2x" className="mb-2 text-purple" />
+                            <p>Create profiles</p>
                         </div>
                     </div>
-                </div>
-                 {/* Why Support Section */}
-                <div className="container">
-                    <div className="space-y-4 pt-8 border-t border-border">
-                        <h3>Why support our project?</h3>
-                        <div className="text-muted-foreground space-y-2">
-                            <p>
-                                This project is maintained by a passionate team of developers who dedicate
-                                their time to creating high-quality, open-source software for the community.
-                            </p>
-                            <p>
-                                Your donations help us cover infrastructure costs, development tools,
-                                and allow us to spend more time improving the project for everyone.
-                            </p>
+                    <div className="col-6 col-md-3 mb-4">
+                        <div className="icon-box">
+                            <FontAwesomeIcon icon={faProjectDiagram} size="2x" className="mb-2 text-purple" />
+                            <p>Explore projects</p>
                         </div>
                     </div>
-                </div>
-            
-                <div className="container py-5">
-                    {/* Título principal */}
-                    <h2 className="section-title text-center fw-bold mb-1">SUPPORT OUR PROJECT</h2>
-                    <h3 className=" text-center mb-5">Made with ❤️ by the open-source community</h3>
-                    {/* Contenedor de los planes */}
-                    <div className="row justify-content-center">
-                        {/* Donate Plan */}
-                        <div className="col-12 col-md-5 mb-4">
-                            <div className="plan-card text-center">
-                                <h5 className="plan-title-1">DONATE</h5>
-                                <p className="plan-description text-white">Support the development of this platform</p>
-                                <ul className="plan-features list-unstyled mt-3 mb-4 text-start mx-auto">
-                                    <li>• Unlimited repositories (basic public or private)</li>
-                                    <li>• Community and collaborative support</li>
-                                    <li>• Up to 2,000 minutes of CI/CD per month</li>
-                                    <li className="pb-2">• AI search </li>{/* Se agrego un padding para nivelar el texto */}
-                                </ul>
-                                <p className="plan-price mt-5">$0.00</p>{/* Se agrego un Margin top para nivelar el boton */}
-                                <Link to="/premium" className="plan-button btn btn-outline-primary">SIGN UP HERE</Link>
-                            </div>
+                    <div className="col-6 col-md-3 mb-4">
+                        <div className="icon-box">
+                            <FontAwesomeIcon icon={faUsers} size="2x" className="mb-2 text-purple" />
+                            <p>Follow devs</p>
                         </div>
                     </div>
-                </div>
+                    <div className="col-6 col-md-3 mb-4">
+                        <div className="icon-box">
+                            <FontAwesomeIcon icon={faMagnifyingGlass} size="2x" className="mb-2 text-purple" />
+                            <p>AI search</p>
+                        </div>
+                    </div>
+                </motion.div>
+
+                <motion.div className="support-section mt-5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+                    <h3 className="fw-bold mb-3">Why support GitWise?</h3>
+                    <p>
+                        GitWise is a next-gen platform for developers. Beyond version control, it’s a place to learn, connect, and grow.
+                        Whether you're showcasing your portfolio, following trending devs, or discovering projects via AI — GitWise empowers you to level up.
+                    </p>
+                    <p>
+                        As an open-source initiative, your support enables us to stay independent, ship features faster, and reach more developers worldwide.
+                    </p>
+                    <Link to="/donate" className="cta-btn mt-3">Donate & Support Innovation</Link>
+                </motion.div>
             </div>
-        </>
+        </motion.div>
     );
 };
-
-

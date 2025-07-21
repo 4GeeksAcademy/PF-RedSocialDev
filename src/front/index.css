@@ -1,75 +1,68 @@
-/* Fondo oscuro general, color de texto y fuente */
+/* ------------------ ESTILO GENERAL ------------------ */
 body {
   background-color: black;
   color: #ffffff;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Título principal */
 .section-title {
-  color: #ffffff; /* <-- Esto es el color del titulo */
+  color: #ffffff;
   font-size: 1.8rem;
   text-transform: uppercase;
 }
 
-/* Subtítulo */
 .section-subtitle {
-  color: #c9d1d9; /* <-- Esto es el color del subtitulo */
+  color: #c9d1d9;
   font-size: 0.9rem;
 }
 
-/* Tarjeta de plan */
+/* ------------------ PLANES ------------------ */
 .plan-title-1 {
-  color: #0ac9ef; /* <-- Esto es el color de FREE */
+  color: #0ac9ef;
 }
+
 .plan-title-2 {
-  color: #fec024; /* <-- Esto es el color de PREMIUN */
+  color: #fec024;
 }
+
 .plan-card {
-  background-color: #212529; /* <-- Esto es el fondo de la card */
-  color: #c9d1d9; /* <-- Esto es el texto general */
-  border: 1px solid white; /* <-- Esto es el borde de la card */
+  background-color: #212529;
+  color: #c9d1d9;
+  border: 1px solid white;
   border-radius: 8px;
   padding: 2rem;
   min-height: 100%;
 }
 
-/* Título del plan */
 .plan-title {
   font-weight: 700;
   font-size: 1.1rem;
   text-transform: uppercase;
 }
 
-/* Lista de características */
 .plan-features li {
   margin-bottom: 0.5rem;
-  color: #c9d1d9; /* <-- Color de cada ítem */
+  color: #c9d1d9;
   font-size: 0.95rem;
 }
 
-/* Precio */
 .plan-price {
-  color: #ffffff; /* <-- Color del precio. */
+  color: #ffffff;
   font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
 }
 
-/* Íconos grandes y azul GitHub */
 .feature-icon {
-  font-size: 2.5rem; /* Esto es el tamaño de los iconos */
-  color: #2f81f7; /* Esto es el color de los iconos */
+  font-size: 2.5rem;
+  color: #7b5bff; /* morado de marca */
 }
 
 .plan-button {
-  width: 100%; /* Esto es el maximo tamaño de los botones de las cards */
+  width: 100%;
 }
 
-/* -------------------------- LANDIND PAGE -------------------------- */
-
-/* botón contact*/
-/* Botón base común */
+/* ------------------ BOTONES ------------------ */
 .btn-action {
   transition: all 0.3s ease;
   border-radius: 0.5rem;
@@ -77,43 +70,120 @@ body {
   font-size: 0.875rem;
 }
 
-/* View Details - Outline azul con efecto hover */
 .btn-view-details {
-  border: 1px solid #2563eb;
-  color: #2563eb;
+  border: 1px solid #7b5bff;
+  color: #7b5bff;
   background-color: transparent;
 }
+
 .btn-view-details:hover {
-  background-color: #2563eb;
+  background-color: #7b5bff;
   color: white;
 }
 
-/* Like / Favorite Buttons - íconos */
 .btn-icon {
   background: none;
   border: none;
   padding: 6px;
   transition: transform 0.2s ease;
 }
+
 .btn-icon:hover {
   transform: scale(1.15);
 }
 
-/* Heart and Star icons when active */
 .btn-icon .text-danger,
 .btn-icon .text-warning {
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
 }
 
-/* Botón personalizado GitWise */
 .btn-gitwise {
-  background-color: #706dfe;
+  background-color: #7b5bff;
   color: white;
   border: none;
   transition: 0.3s;
 }
 
 .btn-gitwise:hover {
-  background-color: #5c58d6;
+  background-color: #5f3fff;
   color: white;
+}
+
+/* ------------------ NUEVA LANDING (github style) ------------------ */
+.hero-bg {
+  background: linear-gradient(to bottom, #0d1117, #161b22);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 1rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #8b949e;
+  max-width: 700px;
+  margin: 1rem auto;
+}
+
+.cta-btn {
+  background-color: #7b5bff;
+  border: none;
+  padding: 12px 24px;
+  font-weight: bold;
+  border-radius: 6px;
+  color: white;
+  transition: background 0.3s ease;
+  text-decoration: none;
+}
+
+.cta-btn:hover {
+  background-color: #5f3fff;
+}
+
+.icon-box {
+  background-color: #21262d;
+  border-radius: 12px;
+  padding: 2rem 1rem;
+  height: 100%;
+  transition: transform 0.2s ease;
+  color: white;
+}
+
+.icon-box:hover {
+  transform: translateY(-5px);
+}
+
+.support-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  color: #c9d1d9;
+}
+
+/* ------------------ RESPONSIVE ------------------ */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  .icon-box {
+    padding: 1.2rem;
+  }
+  .cta-btn {
+    width: 100%;
+    display: block;
+    margin-bottom: 1rem;
+  }
 }

@@ -63,7 +63,7 @@ class User(db.Model):
             "member_since": self.member_since,
             # do not serialize the password, its a security breach
         }
-        
+        print('hello world')
 
 
 class Post(db.Model):
@@ -153,4 +153,3 @@ class Likes(db.Model):
             "user_id": self.user_id,
             "post_id": self.post_id,
         }
-    

@@ -1,7 +1,11 @@
 export const initialStore = () => {
   return {
     message: null,
-    user: null,       // se arreglo sesión desactivada al inicio
+    user: {
+      username: "guest", // o null si se carga luego
+      likes: [],         // IDs de posts con like
+      favorites: []      // IDs de posts favoritos
+    },
     todos: [
       {
         id: 1,
@@ -38,12 +42,6 @@ export default function storeReducer(store, action = {}) {
       return {
         ...store,
         user: action.payload
-      };
-
-    case 'logout':        // se añadio la acción de cierre de sesión
-      return {
-        ...store,
-        user: null
       };
 
     case 'toggle_like':

@@ -15,30 +15,22 @@ import { Posts } from "./pages/Posts";
 import { PostForm } from "./pages/PostForm";
 import { AdminPosts } from "./pages/AdminPosts";
 import { UserProfile } from "./pages/UserProfile";
-import { AISearch } from "./pages/AISearch";
 import { Contact } from "./pages/Contact";
-import Free from './pages/Free';
-import Premium from './pages/Premium';
-import { Posts2 } from "./pages/Posts2";
-import { SinglePost2 } from "./components/SinglePost2";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>}>
       <Route path="/" element={<Home />} />
-      {/* <Route path="/single/:theId" element={<Single />} />  vieja ruta */}
-      <Route path="/single/:Id" element={<SinglePost2 />} />  {/* ✅ nueva ruta */}
+      <Route path="/single/:theId" element={<Single />} />
+      <Route path="/post/:theId" element={<SinglePost />} /> {/* ✅ nueva ruta */}
       <Route path="/demo" element={<Demo />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/posts" element={<Posts2 />} />
+      <Route path="/posts" element={<Posts />} />
       <Route path="/post-form" element={<PostForm />} />
       <Route path="/admin" element={<AdminPosts />} />
       <Route path="/profile" element={<UserProfile />} />
-      <Route path="/AI-search" element={<AISearch />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/free" element={<Free />} />
-      <Route path="/premium" element={<Premium />} />
     </Route>
   )
 );
