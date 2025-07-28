@@ -1201,3 +1201,25 @@ Only use the format provided. No extra commentary.
                 "status": "❌ API error"
             }
         }
+
+# -----------------------------Se añadio Delete Comments 27/7 -------------------------
+
+@api.route('/comments/<int:comment_id>', methods=['DELETE'])
+@jwt_required()
+def delete_comment(comment_id):
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if not user or not user.is_admin:
+        return jsonify({"error": "Unauthorized. Admin access required"}), 403
+
+    comment = Comments.query.get(comment_id)
+    if not comment:
+        return jsonify({"error": "Comment not found"}), 404
+
+    db.session.delete(comment)
+    db.session.commit()
+
+    return jsonify({"message": "Comment deleted successfully"}), 200
+
+

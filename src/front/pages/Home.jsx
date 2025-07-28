@@ -3,6 +3,7 @@ import { faUserGear, faProjectDiagram, faUsers, faMagnifyingGlass } from "@forta
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
+
 export const Home = () => {
     return (
         <motion.div className="hero-bg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>

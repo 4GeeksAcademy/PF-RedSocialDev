@@ -1,135 +1,205 @@
 import { useState, useEffect } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { FaHeart, FaTrashAlt } from "react-icons/fa";
 
-export const CommentSection = ({ postId, currentUser = "albertdcm" }) => {
+export const CommentSection = ({ postId }) => {
+  const { store } = useGlobalReducer();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [editText, setEditText] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, "");
+
+  // Obtener comentarios desde la API
+  const fetchComments = async () => {
+    if (!postId) return;
+    try {
+      const res = await fetch(`${BASE_URL}/api/post/${postId}/comments`);
+      const data = await res.json();
+      if (res.ok) {
+        setComments(data.comments || []);
+      } else {
+        toast.error(data.msg || "Error loading comments");
+      }
+    } catch (err) {
+      toast.error("Server error fetching comments");
+    }
+  };
+
+  // Cargar comentarios al montar componente o cambiar usuario/token
   useEffect(() => {
-    const mockComments = [
-      { id: 1, author: "albertdcm", content: "This is a great project!" },
-      { id: 2, author: "natydev", content: "Interesting use of the stack." },
-    ];
-    setComments(mockComments);
-  }, [postId]);
+    if (postId) fetchComments();
+  }, [postId, store.token]);
 
-  const handleAddComment = () => {
+  // ➕ Enviar nuevo comentario
+  const handleAddComment = async () => {
     if (!newComment.trim()) return;
 
-    const newEntry = {
-      id: Date.now(),
-      author: currentUser,
-      content: newComment.trim(),
-    };
+    setLoading(true);
+    try {
+      const res = await fetch(`${BASE_URL}/api/post/${postId}/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${store.token}`,
+        },
+        body: JSON.stringify({ text: newComment }),
+      });
 
-    setComments([newEntry, ...comments]);
-    setNewComment("");
+      const data = await res.json();
+      if (res.ok) {
+        setComments([data.comment, ...comments]);
+        setNewComment("");
+      } else {
+        toast.error(data.msg || "Failed to add comment");
+      }
+    } catch (err) {
+      toast.error("Server error posting comment");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = (id) => {
-    setComments(comments.filter(comment => comment.id !== id));
+  // Dar o quitar like
+  const handleLike = async (commentId) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/comments/${commentId}/like`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        fetchComments(); // Actualizar likes
+      } else {
+        toast.error(data.msg || "Error toggling like");
+      }
+    } catch (err) {
+      toast.error("Server error toggling like");
+    }
   };
 
-  const handleEdit = (id, content) => {
-    setEditingId(id);
-    setEditText(content);
+  // Borrar comentario
+  const handleDelete = async (commentId) => {
+    if (!window.confirm("Are you sure you want to delete this comment?")) return;
+
+    try {
+      const res = await fetch(`${BASE_URL}/api/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${store.token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Comment deleted");
+        setComments(comments.filter((c) => c.id !== commentId));
+      } else {
+        toast.error(data.msg || "Failed to delete comment");
+      }
+    } catch (err) {
+      toast.error("Server error deleting comment");
+    }
   };
 
-  const handleUpdate = () => {
-    setComments(
-      comments.map(comment =>
-        comment.id === editingId ? { ...comment, content: editText } : comment
-      )
-    );
-    setEditingId(null);
-    setEditText("");
-  };
+  const isAdmin = store?.user?.is_admin;
 
   return (
-    <div className="p-4 rounded" style={{ backgroundColor: "#0d0d0d", color: "#fff" }}>
-      <h5 style={{ color: "#2563eb" }}>Comments</h5>
+    <div className="mt-5">
+      <h5 className="mb-4 text-light">Comments</h5>
 
-      <div className="mb-3">
-        <textarea
-          className="form-control bg-black text-white border-secondary"
-          rows="3"
-          placeholder="Write a comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <button
-          className="btn btn-primary mt-2"
-          onClick={handleAddComment}
-          disabled={!newComment.trim()}
-        >
-          Post Comment
-        </button>
-      </div>
-
-      {comments.length === 0 ? (
-        <p className="text-secondary">No comments yet.</p>
+      {/* Formulario de nuevo comentario */}
+      {store.token ? (
+        <div className="mb-4">
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            className="form-control bg-dark text-light border-secondary"
+            rows="3"
+            placeholder="Write a comment..."
+          ></textarea>
+          <button
+            className="btn btn-primary mt-2"
+            onClick={handleAddComment}
+            disabled={loading}
+          >
+            {loading ? "Posting..." : "Post Comment"}
+          </button>
+        </div>
       ) : (
-        <ul className="list-unstyled">
-          {comments.map((comment) => (
-            <li key={comment.id} className="mb-3 border-bottom border-secondary pb-2">
-              <p className="mb-1">
-                <strong>{comment.author}</strong>:{" "}
-                {editingId === comment.id ? (
-                  <textarea
-                    className="form-control bg-black text-white border-secondary mt-2"
-                    rows="2"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                  />
-                ) : (
-                  comment.content
-                )}
-              </p>
+        <p className="text-light">You must be logged in to leave a comment.</p>
+      )}
 
-              {comment.author === currentUser && (
-                <div className="mt-2 d-flex gap-2">
-                  {editingId === comment.id ? (
-                    <>
-                      <button
-                        className="btn btn-sm btn-success"
-                        onClick={handleUpdate}
-                        disabled={!editText.trim()}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="btn btn-sm btn-secondary"
-                        onClick={() => {
-                          setEditingId(null);
-                          setEditText("");
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="btn btn-sm btn-outline-warning"
-                        onClick={() => handleEdit(comment.id, comment.content)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => handleDelete(comment.id)}
-                      >
-                        Delete
-                      </button>
-                    </>
+      {/* Lista de comentarios */}
+      <ul className="list-group border-0 bg-transparent">
+        {comments.length === 0 && (
+          <li className="list-group-item bg-dark text-center text-light">
+            No comments yet.
+          </li>
+        )}
+
+        {comments.map((comment) => (
+          <li
+            key={comment.id}
+            className="list-group-item bg-dark text-light border-secondary mb-2 rounded"
+          >
+            <div className="d-flex" style={{ width: "100%" }}>
+              {/* Avatar y username */}
+              <div className="me-3 text-center" style={{ width: "60px" }}>
+                <img
+                  src={
+                    comment.author?.avatar_url ||
+                    "https://avatars.githubusercontent.com/u/000000?v=4"
+                  }
+                  alt="avatar"
+                  className="rounded-circle"
+                  style={{ width: "40px", height: "40px" }}
+                />
+                <Link
+                  to="/profile"
+                  className="text-info text-decoration-none fw-semibold d-block mt-1"
+                  style={{ fontSize: "0.85rem" }}
+                >
+                  @{comment.author?.username}
+                </Link>
+              </div>
+
+              {/* Texto del comentario */}
+              <div className="flex-grow-1 d-flex justify-content-between align-items-start">
+                <p className="mb-0">{comment.text}</p>
+
+                {/* Botones */}
+                <div className="ms-3 d-flex flex-column align-items-center">
+                  <button
+                    className="btn btn-sm btn-outline-light d-flex align-items-center justify-content-center mb-2"
+                    style={{ width: "40px", height: "40px" }}
+                    onClick={() => handleLike(comment.id)}
+                    disabled={!store.token}
+                    title="Like"
+                  >
+                    <FaHeart />
+                  </button>
+                  {isAdmin && (
+                    <button
+                      className="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center"
+                      style={{ width: "40px", height: "40px" }}
+                      onClick={() => handleDelete(comment.id)}
+                      title="Delete"
+                    >
+                      <FaTrashAlt />
+                    </button>
                   )}
                 </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -139,6 +139,11 @@ class Comments(db.Model):
             "title": self.title,
             "text": self.text,
             "date_added": self.date_added,
+            "author": { # se añadio esta parte para los comments 27/7
+                "id": self.author.id,
+                "name": self.author.name,
+                "username": self.author.username
+            }
         }
 
 
